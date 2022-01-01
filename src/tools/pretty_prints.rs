@@ -2,7 +2,7 @@ extern crate colored;
 use colored::Colorize;
 
 pub fn pretty_print_banner() {
-    christmas_print("~~~ Advent of code ~~");
+    christmas_print("~~~~~~ Advent of code ~~~~~~");
 }
 
 pub fn christmas_print(text: &str) {
@@ -17,10 +17,14 @@ pub fn christmas_print(text: &str) {
 }
 
 pub fn pretty_print_day(day: i32, part: i32) {
-    christmas_print("=======================================");
+    christmas_print("============================");
     println!("Day {:?} Part {:?}", day, part);
 }
 
 pub fn pretty_print_result(result: i32) {
+    if result == -1 {
+        println!("Not done: {}", format!("{}", result).red());
+        return;
+    }
     println!("Result: {}", format!("{}", result).green());
 }

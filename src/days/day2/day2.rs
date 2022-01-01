@@ -6,8 +6,8 @@ use std::str::FromStr;
 
 pub fn solve_part1() {
     tools::pretty_print_day(2, 1);
-    let mut position = Position::new(0, 0);
-    let commands = file_to_command("D02_input_test.txt");
+    let mut position = Position::new(0, 0, 0);
+    let commands = file_to_command("D02_input.txt");
 
     for command in commands {
         match command.direction {
@@ -21,51 +21,55 @@ pub fn solve_part1() {
 }
 
 pub fn solve_part2() {
-    tools::pretty_print_day(2, 1);
-    tools::pretty_print_result(-1);
-}
+    tools::pretty_print_day(2, 2);
+    let mut position = Position::new(0, 0, 0);
+    let commands = file_to_command("D02_input.txt");
 
-fn file_to_command(path: &str) -> Vec<Command> {
-    let file = tools::get_file(path);
+    for command in commands {
+        match command.direction {
+            Direction::Forward => position.forward_with_aim(command.value),
+            Direction::Up => position.aim_up(command.value),
+            Direction::Down => position.aim_down(command.value),
+        }
+    }
 
-    let bf = BufReader::new(file);
-
-    let result = bf
-        .lines()
-        .map(|it| {
-            let line = String::from(it.unwrap());
-            let mut split = line.split_whitespace();
-            let first_arg = split.next().expect("Direction");
-            let cm = Direction::from_str(first_arg);
-            let value = split.next().unwrap().parse::<i32>().unwrap();
-            return Command::new(cm.unwrap(), value);
-        })
-        .collect::<Vec<Command>>();
-
-    return result;
+    tools::pretty_print_result(position.horizontal * position.depth);
 }
 
 struct Position {
     horizontal: i32,
     depth: i32,
+    aim: i32,
 }
 
 impl Position {
-    fn new(horizontal: i32, depth: i32) -> Position {
+    fn new(horizontal: i32, depth: i32, aim: i32) -> Position {
         return Position {
             horizontal: horizontal,
             depth: depth,
+            aim: aim,
         };
     }
 
     fn forward(&mut self, value: i32) {
         self.horizontal += value;
     }
+    fn forward_with_aim(&mut self, value: i32) {
+        self.horizontal += value;
+        self.depth += self.aim * value;
+    }
+
+    fn aim_down(&mut self, value: i32) {
+        self.aim += value;
+    }
+
+    fn aim_up(&mut self, value: i32) {
+        self.aim -= value;
+    }
 
     fn down(&mut self, value: i32) {
         self.depth += value;
     }
-
     fn up(&mut self, value: i32) {
         self.depth -= value;
     }
@@ -91,6 +95,17 @@ impl fmt::Debug for Command {
             .debug_struct("Command")
             .field("direction", &self.direction.to_string())
             .field("value", &self.value)
+            .finish();
+    }
+}
+
+impl fmt::Debug for Position {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        return f
+            .debug_struct("Position")
+            .field("horizontal", &self.horizontal)
+            .field("depth", &self.depth)
+            .field("aim", &self.aim)
             .finish();
     }
 }
@@ -122,4 +137,24 @@ impl FromStr for Direction {
             _ => Err(Direction::Down),
         }
     }
+}
+
+fn file_to_command(path: &str) -> Vec<Command> {
+    let file = tools::get_file(path);
+
+    let bf = BufReader::new(file);
+
+    let result = bf
+        .lines()
+        .map(|it| {
+            let line = String::from(it.unwrap());
+            let mut split = line.split_whitespace();
+            let first_arg = split.next().expect("Direction");
+            let cm = Direction::from_str(first_arg);
+            let value = split.next().unwrap().parse::<i32>().unwrap();
+            return Command::new(cm.unwrap(), value);
+        })
+        .collect::<Vec<Command>>();
+
+    return result;
 }
