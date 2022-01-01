@@ -28,4 +28,16 @@ pub mod file_utils {
 
         return file;
     }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        #[test]
+        fn read_file_as_numbers_test() {
+            let result = read_file_as_numbers("test_numbers.txt");
+
+            assert_eq!(result, [1, 2, 3, 4, 5]);
+        }
+    }
 }
