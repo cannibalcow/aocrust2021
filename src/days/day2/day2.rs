@@ -6,9 +6,18 @@ use std::str::FromStr;
 
 pub fn solve_part1() {
     tools::pretty_print_day(2, 1);
+    let mut position = Position::new(0, 0);
     let commands = file_to_command("D02_input_test.txt");
-    // println!("{:?}", commands);
-    tools::pretty_print_result(-1);
+
+    for command in commands {
+        match command.direction {
+            Direction::Forward => position.forward(command.value),
+            Direction::Up => position.up(command.value),
+            Direction::Down => position.down(command.value),
+        }
+    }
+
+    tools::pretty_print_result(position.horizontal * position.depth);
 }
 
 pub fn solve_part2() {
@@ -34,6 +43,32 @@ fn file_to_command(path: &str) -> Vec<Command> {
         .collect::<Vec<Command>>();
 
     return result;
+}
+
+struct Position {
+    horizontal: i32,
+    depth: i32,
+}
+
+impl Position {
+    fn new(horizontal: i32, depth: i32) -> Position {
+        return Position {
+            horizontal: horizontal,
+            depth: depth,
+        };
+    }
+
+    fn forward(&mut self, value: i32) {
+        self.horizontal += value;
+    }
+
+    fn down(&mut self, value: i32) {
+        self.depth += value;
+    }
+
+    fn up(&mut self, value: i32) {
+        self.depth -= value;
+    }
 }
 
 struct Command {
