@@ -18,4 +18,14 @@ pub mod file_utils {
             .collect::<Vec<i32>>();
         return result;
     }
+
+    pub fn get_file(path: &str) -> File {
+        let file = File::open(path);
+        let file = match file {
+            Ok(file) => file,
+            Err(error) => panic!("Can't open file: {:?} \n {:?}", path, error),
+        };
+
+        return file;
+    }
 }
