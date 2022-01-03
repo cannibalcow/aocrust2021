@@ -19,6 +19,19 @@ pub mod file_utils {
         return result;
     }
 
+    pub fn read_file_as_string(path: &str) -> Vec<String> {
+        let file = get_file(path);
+
+        let bf = BufReader::new(file);
+
+        let result = bf
+            .lines()
+            .map(|l| l.expect("Could not parse line"))
+            .collect();
+
+        return result;
+    }
+
     pub fn get_file(path: &str) -> File {
         let file = File::open(path);
         let file = match file {
