@@ -5,7 +5,6 @@ use colored::Colorize;
 
 pub fn solve_part1() {
     tools::pretty_print_day(4, 1);
-    println!("Giant Squid");
     let input_path = "D04_input.txt";
     let numbers = parse_input_to_numbers(&input_path);
     let mut boards = parse_input_to_boards(&input_path);
@@ -14,8 +13,6 @@ pub fn solve_part1() {
         for board in &mut boards {
             board.mark(num.clone());
             if board.has_column_bingo() || board.has_row_bingo() {
-                println!("BINGO!");
-                board.print_board();
                 let sum = board.sum_of_all_unmarked();
                 tools::pretty_print_result((num * sum) as i32);
                 return;
@@ -26,7 +23,6 @@ pub fn solve_part1() {
 
 pub fn solve_part2() {
     tools::pretty_print_day(4, 2);
-    println!("Giant Squid");
     let input_path = "D04_input.txt";
     let numbers = parse_input_to_numbers(&input_path);
     let mut boards = parse_input_to_boards(&input_path);
@@ -50,14 +46,6 @@ pub fn solve_part2() {
 
     let last_index = bingos.last().unwrap();
 
-    let last_bingo = boards
-        .iter()
-        .enumerate()
-        .nth(last_index.0 as usize)
-        .unwrap()
-        .1;
-
-    last_bingo.print_board();
     tools::pretty_print_result((last_index.2 * last_index.1) as i32);
 }
 
@@ -178,6 +166,7 @@ impl BingoBoard {
         return false;
     }
 
+    #[allow(dead_code)]
     fn print_board(&self) {
         for (i, value) in self.numbers.iter().enumerate() {
             let is_marked = self.marked_numbers.contains(value);
