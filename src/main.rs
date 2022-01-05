@@ -3,6 +3,7 @@ mod tools;
 
 fn main() {
     tools::pretty_prints::pretty_print_banner();
+
     days::day1::solve_part1();
     days::day1::solve_part2();
 

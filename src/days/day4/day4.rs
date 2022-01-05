@@ -24,7 +24,42 @@ pub fn solve_part1() {
     }
 }
 
-pub fn solve_part2() {}
+pub fn solve_part2() {
+    tools::pretty_print_day(4, 2);
+    println!("Giant Squid");
+    let input_path = "D04_input.txt";
+    let numbers = parse_input_to_numbers(&input_path);
+    let mut boards = parse_input_to_boards(&input_path);
+    let mut bingos: Vec<(u32, u32, u32)> = vec![];
+
+    for num in &numbers {
+        let mut index = 0;
+
+        for board in &mut boards {
+            if board.has_bingo() {
+                continue;
+            }
+            board.mark(num.clone());
+            if board.has_bingo() {
+                let sum_unmarked = board.sum_of_all_unmarked();
+                bingos.push((index, num.clone(), sum_unmarked));
+            }
+            index += 1;
+        }
+    }
+
+    let last_index = bingos.last().unwrap();
+
+    let last_bingo = boards
+        .iter()
+        .enumerate()
+        .nth(last_index.0 as usize)
+        .unwrap()
+        .1;
+
+    last_bingo.print_board();
+    tools::pretty_print_result((last_index.2 * last_index.1) as i32);
+}
 
 fn parse_input_to_boards(path: &str) -> Vec<BingoBoard> {
     let lines = tools::read_file_as_string(path);
@@ -94,6 +129,10 @@ impl BingoBoard {
             .iter()
             .filter(|num| !self.marked_numbers.contains(num))
             .sum::<u32>();
+    }
+
+    fn has_bingo(&self) -> bool {
+        return self.has_column_bingo() || self.has_row_bingo();
     }
 
     fn has_column_bingo(&self) -> bool {
