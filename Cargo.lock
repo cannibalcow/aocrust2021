@@ -6,6 +6,7 @@ version = 3
 name = "aoc2021"
 version = "0.1.0"
 dependencies = [
+ "bresenham",
  "colored",
 ]
 
@@ -19,6 +20,12 @@ dependencies = [
  "libc",
  "winapi",
 ]
+
+[[package]]
+name = "bresenham"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bfc1116225f66d2ea341a26503f83a6b1205070a6f7199ce1f1550ead91f6fd7"
 
 [[package]]
 name = "colored"
