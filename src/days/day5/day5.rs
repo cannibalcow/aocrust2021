@@ -8,16 +8,12 @@ use crate::tools::{self, pretty_print_day, pretty_print_result};
 pub fn solve_part1() {
     pretty_print_day(5, 1);
 
-    let lines = parse_file("D05_input_test.txt");
+    let lines = parse_file("D05_input.txt");
     let grid_size: (u32, u32) = calculate_grid_size(&lines);
 
     let mut grid = Grid::new(grid_size.1 as usize, grid_size.0 as usize);
-    // grid.prind_grid();
     grid.fill_lines(lines, true);
-    // grid.prind_grid();
-
-    println!("Res: {:?}", grid.count_where_more_than_two());
-    pretty_print_result(-1);
+    pretty_print_result(grid.count_where_more_than_two());
 }
 
 pub fn solve_part2() {
@@ -127,8 +123,13 @@ impl Grid {
 
     pub fn count_where_more_than_two(&self) -> i32 {
         let mut c = 0;
-        for i in &self.vec {
-            c = c + i.iter().filter(|f| **f == 2).count();
+
+        for (row, value) in self.vec.iter().enumerate() {
+            for (col, value) in value.iter().enumerate() {
+                if self.vec[row][col] > 1 {
+                    c = c + 1;
+                }
+            }
         }
         return c as i32;
     }
@@ -147,7 +148,8 @@ impl Grid {
         for (row, value) in self.vec.iter().enumerate() {
             print!("{}", format!("{:>2}", row).yellow().bold());
             for (col, value) in value.iter().enumerate() {
-                let val = self.vec[row][col];
+                // let val = self.vec[row][col];
+                let val = &value;
                 match val {
                     0 => print!("{}", format!("{:>2}", val).black()),
                     1 => print!("{}", format!("{:>2}", val).green()),
