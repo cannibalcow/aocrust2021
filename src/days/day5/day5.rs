@@ -18,7 +18,12 @@ pub fn solve_part1() {
 
 pub fn solve_part2() {
     pretty_print_day(5, 2);
-    pretty_print_result(-1);
+    let lines = parse_file("D05_input.txt");
+    let grid_size: (u32, u32) = calculate_grid_size(&lines);
+
+    let mut grid = Grid::new(grid_size.1 as usize, grid_size.0 as usize);
+    grid.fill_lines(lines, false);
+    pretty_print_result(grid.count_where_more_than_two());
 }
 
 fn calculate_grid_size(lines: &Vec<Line>) -> (u32, u32) {
@@ -105,6 +110,7 @@ impl Line {
 }
 
 #[derive(Debug)]
+#[allow(dead_code)]
 struct Grid {
     vec: Vec<Vec<i32>>,
     width: usize,
@@ -125,7 +131,7 @@ impl Grid {
         let mut c = 0;
 
         for (row, value) in self.vec.iter().enumerate() {
-            for (col, value) in value.iter().enumerate() {
+            for (col, _value) in value.iter().enumerate() {
                 if self.vec[row][col] > 1 {
                     c = c + 1;
                 }
@@ -133,11 +139,8 @@ impl Grid {
         }
         return c as i32;
     }
-
-    pub fn update(&mut self) {
-        self.vec[0][0] = 1;
-    }
-
+    
+    #[allow(dead_code)]
     pub fn prind_grid(&self) {
         println!("{}x{}", self.height, self.width);
         print!("{}", format!("{:>2}", " ").yellow().bold());
@@ -147,9 +150,7 @@ impl Grid {
         println!("");
         for (row, value) in self.vec.iter().enumerate() {
             print!("{}", format!("{:>2}", row).yellow().bold());
-            for (col, value) in value.iter().enumerate() {
-                // let val = self.vec[row][col];
-                let val = &value;
+            for (_col, val) in value.iter().enumerate() {
                 match val {
                     0 => print!("{}", format!("{:>2}", val).black()),
                     1 => print!("{}", format!("{:>2}", val).green()),
@@ -169,14 +170,11 @@ impl Grid {
             } else {
                 for (x, y) in Bresenham::new(line.to_bp1(), line.to_bp2()) {
                     let  val = self.vec[x as usize][y as usize];
-                    // println!("{:?}x{:?} = {:?} => {:?}", x,y, val, val +1 );
                     self.vec[x as usize][y as usize] = val +1;
                 }
                 let new_val = self.vec[line.p2.0 as usize][line.p2.1 as usize];
-                // println!("{:?}x{:?} = {:?} => {:?}", line.p2.0,line.p2.1, new_val, new_val + 1);
                 self.vec[line.p2.0 as usize][line.p2.1 as usize] = new_val + 1;
             }
-            // println!("--")
         }
     }
 
