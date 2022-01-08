@@ -58,12 +58,8 @@ impl Part2 {
     pub fn next_day(&mut self) {
         const NY: usize = 8;
         const RESET: usize = 6;
-
         self.state.rotate_left(1);
         self.state[RESET] += self.state[NY];
-        // self.state[NY] += self.state[SPAWN]; // nya
-        // self.state[RESET] += self.state[SPAWN]; // reset
-        // self.state[SPAWN] = 0;
         self.day += 1;
     }
 
