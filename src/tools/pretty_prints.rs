@@ -28,3 +28,7 @@ pub fn pretty_print_result(result: i32) {
     }
     println!("Result: {}", format!("{}", result).green());
 }
+
+pub fn pretty_print_result_str(result: String) {
+    println!("Result: {}", format!("{}", result).green());
+}
