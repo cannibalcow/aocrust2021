@@ -32,6 +32,17 @@ pub mod file_utils {
         return result;
     }
 
+    pub fn read_file_as_i32(path: &str) -> Vec<i32> {
+        let lines = read_file_as_string(path);
+        let fline = lines.iter().next().unwrap();
+        let result: Vec<i32> = fline
+            .split(",")
+            .into_iter()
+            .map(|numstr| numstr.parse().unwrap())
+            .collect::<Vec<i32>>();
+        return result;
+    }
+
     pub fn get_file(path: &str) -> File {
         let file = File::open(path);
         let file = match file {
